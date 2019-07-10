@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Audio
 {
-    public class AudioControl
+    public class AudioControl : IDisposable
     {
         private WaveOutEvent outputDevice;
         private AudioFileReader audioFile;
@@ -44,12 +44,11 @@ namespace Audio
 
         public void SetVolume(int volume)
         {
-            audioFile.Volume = volume / 100;
+            audioFile.Volume = volume / 100f;
         }
 
         void TimerCallback(Object o)
         {
-            //UpdatePosition(outputDevice.GetPosition());
             UpdatePosition.Invoke((int)audioFile.CurrentTime.TotalSeconds);
         }
 
@@ -86,8 +85,8 @@ namespace Audio
 
         public void Stop()
         {
-            outputDevice.Stop();
             StopTimer();
+            outputDevice.Stop();
         }
 
         public void Rewind()
@@ -113,5 +112,12 @@ namespace Audio
         {            
         }
 
+        public void Dispose()
+        {
+            outputDevice.Dispose();
+            audioFile.Dispose();
+            outputDevice = null;
+            audioFile = null;
+    }
     }
 }

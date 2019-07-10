@@ -16,24 +16,33 @@ namespace Transcript_Tool
     {
         Config config;
         AudioControl audioControl;
+        bool endSignal;
 
         private delegate void UpdatePositionSafe(int position);
-
+        UpdatePositionSafe safeFunction;
 
         public MainWindows()
+        {
+            InitializeComponent();
+            Init();
+        }
+
+        void Init()
         {
             config = new Config();
             audioControl = new AudioControl();
             audioControl.UpdatePosition += AudioControl_UpdatePosition;
+            safeFunction = new UpdatePositionSafe(AudioControl_UpdatePosition);
+            endSignal = false;
 
-            InitializeComponent();
         }
+
 
         private void BtnExit_Click(object sender, EventArgs e)
         {
             if (!config.ProyectSaved)
             {
-                if(MessageBox.Show("The project is not saved. Do you want save it?", "Warning - Not saved project", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+                if (MessageBox.Show("The project is not saved. Do you want save it?", "Warning - Not saved project", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
                 {
                     config.SaveProyect();
                 }
@@ -43,7 +52,7 @@ namespace Transcript_Tool
 
         private void BtnPlay_Click(object sender, EventArgs e)
         {
-            if(audioControl.Play())
+            if (audioControl.Play())
             {
                 trackVolume.Value = audioControl.GetVolume();
                 trackTime.Maximum = audioControl.GetDuration();
@@ -52,16 +61,18 @@ namespace Transcript_Tool
 
         private void AudioControl_UpdatePosition(int position)
         {
-            if(trackTime.InvokeRequired)
+            if (!endSignal)
             {
-                var d = new UpdatePositionSafe(AudioControl_UpdatePosition);
-                Invoke(d, new object[] { position });
-            }
-            else
-            {
-                if (position <= trackTime.Maximum)
+                if (trackTime.InvokeRequired)
                 {
-                    trackTime.Value = position;
+                    Invoke(safeFunction, new object[] { position });
+                }
+                else
+                {
+                    if (position <= trackTime.Maximum)
+                    {
+                        trackTime.Value = position;
+                    }
                 }
             }
         }
@@ -71,7 +82,7 @@ namespace Transcript_Tool
             openFileDialog1.Filter = "(*.mp3)|*.mp3|All files (*.*)|*.*";
             openFileDialog1.FileName = "";
             openFileDialog1.ShowDialog();
-            if(!string.IsNullOrEmpty(openFileDialog1.FileName))
+            if (!string.IsNullOrEmpty(openFileDialog1.FileName))
             {
                 this.txtFileName.Text = openFileDialog1.FileName;
                 audioControl.LoadFile(openFileDialog1.FileName);
@@ -94,5 +105,15 @@ namespace Transcript_Tool
             audioControl.SetVolume(trackVolume.Value);
         }
 
+        private void MainWindows_FormClosing(object sender, FormClosingEventArgs e)
+        {
+
+            endSignal = true;
+            audioControl.UpdatePosition -= AudioControl_UpdatePosition;
+            audioControl.Stop();
+            audioControl.Dispose();
+            audioControl = null;
+            config = null;
+        }
     }
 }
