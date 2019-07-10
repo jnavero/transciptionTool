@@ -37,6 +37,12 @@
             this.btnSaveProject = new System.Windows.Forms.Button();
             this.btnNewProject = new System.Windows.Forms.Button();
             this.gpBoxAudio = new System.Windows.Forms.GroupBox();
+            this.lblTimeStatus = new System.Windows.Forms.Label();
+            this.lblTime = new System.Windows.Forms.Label();
+            this.btnRew10s = new System.Windows.Forms.Button();
+            this.btnFwd10sec = new System.Windows.Forms.Button();
+            this.btnPause = new System.Windows.Forms.Button();
+            this.btnFwd5sec = new System.Windows.Forms.Button();
             this.lblVolumeStatus = new System.Windows.Forms.Label();
             this.lblVolume = new System.Windows.Forms.Label();
             this.trackVolume = new System.Windows.Forms.TrackBar();
@@ -141,6 +147,12 @@
             // 
             // gpBoxAudio
             // 
+            this.gpBoxAudio.Controls.Add(this.lblTimeStatus);
+            this.gpBoxAudio.Controls.Add(this.lblTime);
+            this.gpBoxAudio.Controls.Add(this.btnRew10s);
+            this.gpBoxAudio.Controls.Add(this.btnFwd10sec);
+            this.gpBoxAudio.Controls.Add(this.btnPause);
+            this.gpBoxAudio.Controls.Add(this.btnFwd5sec);
             this.gpBoxAudio.Controls.Add(this.lblVolumeStatus);
             this.gpBoxAudio.Controls.Add(this.lblVolume);
             this.gpBoxAudio.Controls.Add(this.trackVolume);
@@ -157,19 +169,81 @@
             this.gpBoxAudio.TabStop = false;
             this.gpBoxAudio.Text = "Audio tools and analytics";
             // 
+            // lblTimeStatus
+            // 
+            this.lblTimeStatus.AutoSize = true;
+            this.lblTimeStatus.Location = new System.Drawing.Point(60, 65);
+            this.lblTimeStatus.Name = "lblTimeStatus";
+            this.lblTimeStatus.Size = new System.Drawing.Size(36, 17);
+            this.lblTimeStatus.TabIndex = 12;
+            this.lblTimeStatus.Text = "0:00";
+            // 
+            // lblTime
+            // 
+            this.lblTime.AutoSize = true;
+            this.lblTime.Location = new System.Drawing.Point(7, 65);
+            this.lblTime.Name = "lblTime";
+            this.lblTime.Size = new System.Drawing.Size(47, 17);
+            this.lblTime.TabIndex = 11;
+            this.lblTime.Text = "Time: ";
+            // 
+            // btnRew10s
+            // 
+            this.btnRew10s.Location = new System.Drawing.Point(60, 293);
+            this.btnRew10s.Margin = new System.Windows.Forms.Padding(4);
+            this.btnRew10s.Name = "btnRew10s";
+            this.btnRew10s.Size = new System.Drawing.Size(67, 28);
+            this.btnRew10s.TabIndex = 10;
+            this.btnRew10s.Text = "&-10 sec";
+            this.btnRew10s.UseVisualStyleBackColor = true;
+            this.btnRew10s.Click += new System.EventHandler(this.btnRew10s_Click);
+            // 
+            // btnFwd10sec
+            // 
+            this.btnFwd10sec.Location = new System.Drawing.Point(435, 293);
+            this.btnFwd10sec.Margin = new System.Windows.Forms.Padding(4);
+            this.btnFwd10sec.Name = "btnFwd10sec";
+            this.btnFwd10sec.Size = new System.Drawing.Size(67, 28);
+            this.btnFwd10sec.TabIndex = 9;
+            this.btnFwd10sec.Text = "&+10 sec";
+            this.btnFwd10sec.UseVisualStyleBackColor = true;
+            this.btnFwd10sec.Click += new System.EventHandler(this.btnFwd10sec_Click);
+            // 
+            // btnPause
+            // 
+            this.btnPause.Location = new System.Drawing.Point(285, 293);
+            this.btnPause.Margin = new System.Windows.Forms.Padding(4);
+            this.btnPause.Name = "btnPause";
+            this.btnPause.Size = new System.Drawing.Size(67, 28);
+            this.btnPause.TabIndex = 8;
+            this.btnPause.Text = "Pause";
+            this.btnPause.UseVisualStyleBackColor = true;
+            this.btnPause.Click += new System.EventHandler(this.btnPause_Click);
+            // 
+            // btnFwd5sec
+            // 
+            this.btnFwd5sec.Location = new System.Drawing.Point(360, 293);
+            this.btnFwd5sec.Margin = new System.Windows.Forms.Padding(4);
+            this.btnFwd5sec.Name = "btnFwd5sec";
+            this.btnFwd5sec.Size = new System.Drawing.Size(67, 28);
+            this.btnFwd5sec.TabIndex = 7;
+            this.btnFwd5sec.Text = "&+5 sec";
+            this.btnFwd5sec.UseVisualStyleBackColor = true;
+            this.btnFwd5sec.Click += new System.EventHandler(this.btnFwd5sec_Click);
+            // 
             // lblVolumeStatus
             // 
             this.lblVolumeStatus.AutoSize = true;
-            this.lblVolumeStatus.Location = new System.Drawing.Point(872, 304);
+            this.lblVolumeStatus.Location = new System.Drawing.Point(853, 304);
             this.lblVolumeStatus.Name = "lblVolumeStatus";
-            this.lblVolumeStatus.Size = new System.Drawing.Size(16, 17);
+            this.lblVolumeStatus.Size = new System.Drawing.Size(32, 17);
             this.lblVolumeStatus.TabIndex = 6;
-            this.lblVolumeStatus.Text = "0";
+            this.lblVolumeStatus.Text = "100";
             // 
             // lblVolume
             // 
             this.lblVolume.AutoSize = true;
-            this.lblVolume.Location = new System.Drawing.Point(811, 304);
+            this.lblVolume.Location = new System.Drawing.Point(784, 304);
             this.lblVolume.Name = "lblVolume";
             this.lblVolume.Size = new System.Drawing.Size(63, 17);
             this.lblVolume.TabIndex = 5;
@@ -183,16 +257,17 @@
             this.trackVolume.Orientation = System.Windows.Forms.Orientation.Vertical;
             this.trackVolume.Size = new System.Drawing.Size(56, 241);
             this.trackVolume.TabIndex = 4;
+            this.trackVolume.Value = 100;
             this.trackVolume.Scroll += new System.EventHandler(this.trackVolume_Scroll);
             // 
             // btnRew5s
             // 
-            this.btnRew5s.Location = new System.Drawing.Point(81, 248);
+            this.btnRew5s.Location = new System.Drawing.Point(135, 293);
             this.btnRew5s.Margin = new System.Windows.Forms.Padding(4);
             this.btnRew5s.Name = "btnRew5s";
-            this.btnRew5s.Size = new System.Drawing.Size(100, 28);
+            this.btnRew5s.Size = new System.Drawing.Size(67, 28);
             this.btnRew5s.TabIndex = 3;
-            this.btnRew5s.Text = "-5 sec";
+            this.btnRew5s.Text = "&-5 sec";
             this.btnRew5s.UseVisualStyleBackColor = true;
             this.btnRew5s.Click += new System.EventHandler(this.BtnRew5s_Click);
             // 
@@ -206,10 +281,10 @@
             // 
             // btnStop
             // 
-            this.btnStop.Location = new System.Drawing.Point(416, 248);
+            this.btnStop.Location = new System.Drawing.Point(710, 293);
             this.btnStop.Margin = new System.Windows.Forms.Padding(4);
             this.btnStop.Name = "btnStop";
-            this.btnStop.Size = new System.Drawing.Size(100, 28);
+            this.btnStop.Size = new System.Drawing.Size(67, 28);
             this.btnStop.TabIndex = 1;
             this.btnStop.Text = "Stop";
             this.btnStop.UseVisualStyleBackColor = true;
@@ -217,10 +292,10 @@
             // 
             // btnPlay
             // 
-            this.btnPlay.Location = new System.Drawing.Point(189, 248);
+            this.btnPlay.Location = new System.Drawing.Point(210, 293);
             this.btnPlay.Margin = new System.Windows.Forms.Padding(4);
             this.btnPlay.Name = "btnPlay";
-            this.btnPlay.Size = new System.Drawing.Size(100, 28);
+            this.btnPlay.Size = new System.Drawing.Size(67, 28);
             this.btnPlay.TabIndex = 0;
             this.btnPlay.Text = "Play";
             this.btnPlay.UseVisualStyleBackColor = true;
@@ -276,6 +351,12 @@
         private System.Windows.Forms.TrackBar trackVolume;
         private System.Windows.Forms.Label lblVolumeStatus;
         private System.Windows.Forms.Label lblVolume;
+        private System.Windows.Forms.Button btnFwd5sec;
+        private System.Windows.Forms.Button btnPause;
+        private System.Windows.Forms.Button btnRew10s;
+        private System.Windows.Forms.Button btnFwd10sec;
+        private System.Windows.Forms.Label lblTimeStatus;
+        private System.Windows.Forms.Label lblTime;
     }
 }
 

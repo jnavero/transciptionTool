@@ -44,7 +44,11 @@ namespace Audio
 
         public void SetVolume(int volume)
         {
-            audioFile.Volume = volume / 100f;
+            if(audioFile != null)
+            {
+                audioFile.Volume = volume / 100f;
+            }
+            
         }
 
         void TimerCallback(Object o)
@@ -87,17 +91,38 @@ namespace Audio
         {
             StopTimer();
             outputDevice.Stop();
+            Rewind();
+        }
+
+        public void Pause()
+        {
+            outputDevice.Pause();
         }
 
         public void Rewind()
         {
-            audioFile.Position = 0;
+            if(audioFile != null)
+            {
+                audioFile.Position = 0;
+            }
         }
 
         public void Rewind(int seconds)
         {
-            seconds = seconds * -1;
-            audioFile.CurrentTime = audioFile.CurrentTime.Add(new TimeSpan(0, 0, seconds));
+            AudioPosition(seconds * -1);
+        }
+
+        public void Forward(int seconds)
+        {
+            AudioPosition(seconds);
+        }
+
+        public void AudioPosition(int seconds)
+        {
+            if(audioFile != null)
+            {
+                audioFile.CurrentTime = audioFile.CurrentTime.Add(new TimeSpan(0, 0, seconds));
+            }
         }
 
         public int GetDuration()
@@ -108,8 +133,17 @@ namespace Audio
             return 0;
         }
 
-        public void GetCurrentPosition(int position)
+        void GetCurrentPosition(int position)
         {            
+        }
+
+        public string GetCurrentPosition()
+        {
+            if(audioFile != null)
+            {
+                return audioFile.CurrentTime.ToString("c");
+            }
+            return null;
         }
 
         public void Dispose()
@@ -119,5 +153,7 @@ namespace Audio
             outputDevice = null;
             audioFile = null;
     }
+
+
     }
 }

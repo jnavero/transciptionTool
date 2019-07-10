@@ -16,7 +16,7 @@ namespace Transcript_Tool
     {
         Config config;
         AudioControl audioControl;
-        bool endSignal;
+        bool noSignal;
 
         private delegate void UpdatePositionSafe(int position);
         UpdatePositionSafe safeFunction;
@@ -33,8 +33,7 @@ namespace Transcript_Tool
             audioControl = new AudioControl();
             audioControl.UpdatePosition += AudioControl_UpdatePosition;
             safeFunction = new UpdatePositionSafe(AudioControl_UpdatePosition);
-            endSignal = false;
-
+            noSignal = false;
         }
 
 
@@ -61,7 +60,7 @@ namespace Transcript_Tool
 
         private void AudioControl_UpdatePosition(int position)
         {
-            if (!endSignal)
+            if (!noSignal)
             {
                 if (trackTime.InvokeRequired)
                 {
@@ -72,6 +71,7 @@ namespace Transcript_Tool
                     if (position <= trackTime.Maximum)
                     {
                         trackTime.Value = position;
+                        timeTrackSettings(position);
                     }
                 }
             }
@@ -94,9 +94,9 @@ namespace Transcript_Tool
             audioControl.Stop();
         }
 
-        private void BtnRew5s_Click(object sender, EventArgs e)
+        private void btnPause_Click(object sender, EventArgs e)
         {
-            audioControl.Rewind(5);
+            audioControl.Pause();
         }
 
         private void trackVolume_Scroll(object sender, EventArgs e)
@@ -107,13 +107,38 @@ namespace Transcript_Tool
 
         private void MainWindows_FormClosing(object sender, FormClosingEventArgs e)
         {
-
-            endSignal = true;
+            noSignal = true;
             audioControl.UpdatePosition -= AudioControl_UpdatePosition;
             audioControl.Stop();
             audioControl.Dispose();
             audioControl = null;
             config = null;
         }
+
+        private void BtnRew5s_Click(object sender, EventArgs e)
+        {
+            audioControl.Rewind(5);
+        }
+
+        private void btnFwd5sec_Click(object sender, EventArgs e)
+        {
+            audioControl.Forward(5);
+        }
+
+        private void btnRew10s_Click(object sender, EventArgs e)
+        {
+            audioControl.Rewind(10);
+        }
+
+        private void btnFwd10sec_Click(object sender, EventArgs e)
+        {
+            audioControl.Forward(10);
+        }
+
+        private void timeTrackSettings(int position)
+        {
+            lblTimeStatus.Text = position.ToString() + "s / " + audioControl.GetCurrentPosition();
+        }
+
     }
 }
