@@ -140,5 +140,25 @@ namespace Transcript_Tool
             lblTimeStatus.Text = position.ToString() + "s / " + audioControl.GetCurrentPosition();
         }
 
+        private void trackTime_MouseDown(object sender, MouseEventArgs e)
+        {
+
+        }
+
+        private void btnGoPosition_Click(object sender, EventArgs e)
+        {
+   
+        }
+
+        private void txtGoTo_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if(e.KeyChar == ':' )
+            {
+                if (!txtGoTo.Text.Contains(":"))
+                {                    
+                }
+            }
+            
+        }
     }
 }

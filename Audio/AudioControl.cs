@@ -44,16 +44,19 @@ namespace Audio
 
         public void SetVolume(int volume)
         {
-            if(audioFile != null)
+            if (audioFile != null)
             {
                 audioFile.Volume = volume / 100f;
             }
-            
+
         }
 
         void TimerCallback(Object o)
         {
-            UpdatePosition.Invoke((int)audioFile.CurrentTime.TotalSeconds);
+            if (audioFile != null)
+            {
+                UpdatePosition.Invoke((int)audioFile.CurrentTime.TotalSeconds);
+            }
         }
 
 
@@ -64,7 +67,7 @@ namespace Audio
             {
                 Stop();
             }
-            outputDevice.Init(audioFile);   
+            outputDevice.Init(audioFile);
         }
 
         public bool Play()
@@ -101,7 +104,7 @@ namespace Audio
 
         public void Rewind()
         {
-            if(audioFile != null)
+            if (audioFile != null)
             {
                 audioFile.Position = 0;
             }
@@ -119,7 +122,7 @@ namespace Audio
 
         public void AudioPosition(int seconds)
         {
-            if(audioFile != null)
+            if (audioFile != null)
             {
                 audioFile.CurrentTime = audioFile.CurrentTime.Add(new TimeSpan(0, 0, seconds));
             }
@@ -127,19 +130,19 @@ namespace Audio
 
         public int GetDuration()
         {
-            if(audioFile != null)
+            if (audioFile != null)
                 return (int)audioFile.TotalTime.TotalSeconds;
 
             return 0;
         }
 
         void GetCurrentPosition(int position)
-        {            
+        {
         }
 
         public string GetCurrentPosition()
         {
-            if(audioFile != null)
+            if (audioFile != null)
             {
                 return audioFile.CurrentTime.ToString("c");
             }
@@ -149,10 +152,10 @@ namespace Audio
         public void Dispose()
         {
             outputDevice.Dispose();
-            audioFile.Dispose();
+            audioFile?.Dispose();
             outputDevice = null;
             audioFile = null;
-    }
+        }
 
 
     }
