@@ -32,6 +32,21 @@ namespace Audio
             t = null;
         }
 
+        public int GetVolume()
+        {
+            if (audioFile != null)
+            {
+                return (int)(audioFile.Volume * 100);
+            }
+
+            return 0;
+        }
+
+        public void SetVolume(int volume)
+        {
+            audioFile.Volume = volume / 100;
+        }
+
         void TimerCallback(Object o)
         {
             //UpdatePosition(outputDevice.GetPosition());
@@ -55,7 +70,6 @@ namespace Audio
             {
                 return false;
             }
-
             UpdatePosition -= GetCurrentPosition;
             UpdatePosition += GetCurrentPosition;
 
@@ -81,11 +95,11 @@ namespace Audio
             audioFile.Position = 0;
         }
 
-        public void Rewind(long position)
+        public void Rewind(int seconds)
         {
-            audioFile.Position = audioFile.Position - position;
+            seconds = seconds * -1;
+            audioFile.CurrentTime = audioFile.CurrentTime.Add(new TimeSpan(0, 0, seconds));
         }
-
 
         public int GetDuration()
         {
@@ -95,13 +109,9 @@ namespace Audio
             return 0;
         }
 
-
         public void GetCurrentPosition(int position)
-        {
-            
+        {            
         }
-
-
 
     }
 }

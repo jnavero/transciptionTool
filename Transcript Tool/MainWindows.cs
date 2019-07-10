@@ -45,22 +45,23 @@ namespace Transcript_Tool
         {
             if(audioControl.Play())
             {
-                trackBar1.Maximum = audioControl.GetDuration();
+                trackVolume.Value = audioControl.GetVolume();
+                trackTime.Maximum = audioControl.GetDuration();
             }
         }
 
         private void AudioControl_UpdatePosition(int position)
         {
-            if(trackBar1.InvokeRequired)
+            if(trackTime.InvokeRequired)
             {
                 var d = new UpdatePositionSafe(AudioControl_UpdatePosition);
                 Invoke(d, new object[] { position });
             }
             else
             {
-                if (position <= trackBar1.Maximum)
+                if (position <= trackTime.Maximum)
                 {
-                    trackBar1.Value = position;
+                    trackTime.Value = position;
                 }
             }
         }
@@ -86,5 +87,12 @@ namespace Transcript_Tool
         {
             audioControl.Rewind(5);
         }
+
+        private void trackVolume_Scroll(object sender, EventArgs e)
+        {
+            lblVolumeStatus.Text = trackVolume.Value.ToString();
+            audioControl.SetVolume(trackVolume.Value);
+        }
+
     }
 }
