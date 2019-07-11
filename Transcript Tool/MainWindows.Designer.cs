@@ -37,6 +37,9 @@
             this.btnSaveProject = new System.Windows.Forms.Button();
             this.btnNewProject = new System.Windows.Forms.Button();
             this.gpBoxAudio = new System.Windows.Forms.GroupBox();
+            this.btnGoPosition = new System.Windows.Forms.Button();
+            this.txtGoTo = new System.Windows.Forms.TextBox();
+            this.lblGoto = new System.Windows.Forms.Label();
             this.lblTimeStatus = new System.Windows.Forms.Label();
             this.lblTime = new System.Windows.Forms.Label();
             this.btnRew10s = new System.Windows.Forms.Button();
@@ -51,9 +54,6 @@
             this.btnStop = new System.Windows.Forms.Button();
             this.btnPlay = new System.Windows.Forms.Button();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.lblGoto = new System.Windows.Forms.Label();
-            this.txtGoTo = new System.Windows.Forms.TextBox();
-            this.btnGoPosition = new System.Windows.Forms.Button();
             this.gpBoxAudio.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackVolume)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackTime)).BeginInit();
@@ -175,6 +175,34 @@
             this.gpBoxAudio.TabStop = false;
             this.gpBoxAudio.Text = "Audio tools and analytics";
             // 
+            // btnGoPosition
+            // 
+            this.btnGoPosition.Location = new System.Drawing.Point(257, 97);
+            this.btnGoPosition.Name = "btnGoPosition";
+            this.btnGoPosition.Size = new System.Drawing.Size(67, 28);
+            this.btnGoPosition.TabIndex = 15;
+            this.btnGoPosition.Text = "Go";
+            this.btnGoPosition.UseVisualStyleBackColor = true;
+            this.btnGoPosition.Click += new System.EventHandler(this.btnGoPosition_Click);
+            // 
+            // txtGoTo
+            // 
+            this.txtGoTo.Location = new System.Drawing.Point(172, 100);
+            this.txtGoTo.Name = "txtGoTo";
+            this.txtGoTo.Size = new System.Drawing.Size(72, 22);
+            this.txtGoTo.TabIndex = 14;
+            this.txtGoTo.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtGoTo_KeyDown);
+            this.txtGoTo.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtGoTo_KeyUp);
+            // 
+            // lblGoto
+            // 
+            this.lblGoto.AutoSize = true;
+            this.lblGoto.Location = new System.Drawing.Point(7, 103);
+            this.lblGoto.Name = "lblGoto";
+            this.lblGoto.Size = new System.Drawing.Size(159, 17);
+            this.lblGoto.TabIndex = 13;
+            this.lblGoto.Text = "Go to Position (mm:ss): ";
+            // 
             // lblTimeStatus
             // 
             this.lblTimeStatus.AutoSize = true;
@@ -281,6 +309,7 @@
             // 
             this.trackTime.Location = new System.Drawing.Point(8, 23);
             this.trackTime.Margin = new System.Windows.Forms.Padding(4);
+            this.trackTime.Maximum = 0;
             this.trackTime.Name = "trackTime";
             this.trackTime.Size = new System.Drawing.Size(901, 56);
             this.trackTime.TabIndex = 2;
@@ -311,33 +340,6 @@
             // openFileDialog1
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
-            // 
-            // lblGoto
-            // 
-            this.lblGoto.AutoSize = true;
-            this.lblGoto.Location = new System.Drawing.Point(7, 103);
-            this.lblGoto.Name = "lblGoto";
-            this.lblGoto.Size = new System.Drawing.Size(159, 17);
-            this.lblGoto.TabIndex = 13;
-            this.lblGoto.Text = "Go to Position (mm:ss): ";
-            // 
-            // txtGoTo
-            // 
-            this.txtGoTo.Location = new System.Drawing.Point(172, 100);
-            this.txtGoTo.Name = "txtGoTo";
-            this.txtGoTo.Size = new System.Drawing.Size(72, 22);
-            this.txtGoTo.TabIndex = 14;
-            this.txtGoTo.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtGoTo_KeyPress);
-            // 
-            // btnGoPosition
-            // 
-            this.btnGoPosition.Location = new System.Drawing.Point(252, 100);
-            this.btnGoPosition.Name = "btnGoPosition";
-            this.btnGoPosition.Size = new System.Drawing.Size(36, 23);
-            this.btnGoPosition.TabIndex = 15;
-            this.btnGoPosition.Text = "Go";
-            this.btnGoPosition.UseVisualStyleBackColor = true;
-            this.btnGoPosition.Click += new System.EventHandler(this.btnGoPosition_Click);
             // 
             // MainWindows
             // 

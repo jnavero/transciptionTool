@@ -76,6 +76,7 @@ namespace Audio
             {
                 return false;
             }
+
             UpdatePosition -= GetCurrentPosition;
             UpdatePosition += GetCurrentPosition;
 

@@ -17,6 +17,7 @@ namespace Transcript_Tool
         Config config;
         AudioControl audioControl;
         bool noSignal;
+        bool shiftPressed;
 
         private delegate void UpdatePositionSafe(int position);
         UpdatePositionSafe safeFunction;
@@ -147,18 +148,60 @@ namespace Transcript_Tool
 
         private void btnGoPosition_Click(object sender, EventArgs e)
         {
-   
+            if(trackTime.Maximum != 0)
+            {
+                var timeString = txtGoTo.Text;
+                if (!timeString.Contains(":"))
+                {
+                    timeString = "00:" + timeString;
+                }
+
+                var time = txtGoTo.Text.Split(new char[] { ':' });
+
+                var timeSplit = new TimeSpan(0, Convert.ToInt32(time[0]), Convert.ToInt32(time[1]));
+            }
         }
 
-        private void txtGoTo_KeyPress(object sender, KeyPressEventArgs e)
+        private void txtGoTo_KeyDown(object sender, KeyEventArgs e)
         {
-            if(e.KeyChar == ':' )
+            if (e.KeyValue == 190 && shiftPressed)
             {
                 if (!txtGoTo.Text.Contains(":"))
-                {                    
+                {
+                    e.SuppressKeyPress = false;
+                }
+                else
+                {
+                    e.SuppressKeyPress = true;
                 }
             }
-            
+            else if (e.KeyCode >= Keys.D0 && e.KeyCode <= Keys.D9)
+            {
+                e.SuppressKeyPress = false;
+            }
+            else if (e.KeyCode == Keys.ShiftKey)
+            {
+                shiftPressed = true;
+                e.SuppressKeyPress = true;
+            }
+            else if (e.KeyCode == Keys.Back || e.KeyCode == Keys.Left ||
+                     e.KeyCode == Keys.Right || e.KeyCode == Keys.Subtract ||
+                     e.KeyCode == Keys.Delete)
+            {
+                e.SuppressKeyPress = false;
+            }
+            else
+            {
+                e.SuppressKeyPress = true;
+            }
+        }
+
+        private void txtGoTo_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.ShiftKey)
+            {
+                shiftPressed = false;
+            }
         }
     }
 }
