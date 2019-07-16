@@ -33,6 +33,12 @@
             this.lblTranscriptFile = new System.Windows.Forms.Label();
             this.txtFileName = new System.Windows.Forms.TextBox();
             this.gpboxConfig = new System.Windows.Forms.GroupBox();
+            this.txtPause = new System.Windows.Forms.TextBox();
+            this.lblpause = new System.Windows.Forms.Label();
+            this.lblcutTime = new System.Windows.Forms.Label();
+            this.txtCutTime = new System.Windows.Forms.TextBox();
+            this.txtRepetitions = new System.Windows.Forms.TextBox();
+            this.lblReplay = new System.Windows.Forms.Label();
             this.btnLoadProject = new System.Windows.Forms.Button();
             this.btnSaveProject = new System.Windows.Forms.Button();
             this.btnNewProject = new System.Windows.Forms.Button();
@@ -54,6 +60,8 @@
             this.btnStop = new System.Windows.Forms.Button();
             this.btnPlay = new System.Windows.Forms.Button();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+            this.gpboxConfig.SuspendLayout();
             this.gpBoxAudio.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackVolume)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackTime)).BeginInit();
@@ -106,6 +114,12 @@
             // 
             // gpboxConfig
             // 
+            this.gpboxConfig.Controls.Add(this.txtPause);
+            this.gpboxConfig.Controls.Add(this.lblpause);
+            this.gpboxConfig.Controls.Add(this.lblcutTime);
+            this.gpboxConfig.Controls.Add(this.txtCutTime);
+            this.gpboxConfig.Controls.Add(this.txtRepetitions);
+            this.gpboxConfig.Controls.Add(this.lblReplay);
             this.gpboxConfig.Location = new System.Drawing.Point(16, 41);
             this.gpboxConfig.Margin = new System.Windows.Forms.Padding(4);
             this.gpboxConfig.Name = "gpboxConfig";
@@ -114,6 +128,57 @@
             this.gpboxConfig.TabIndex = 4;
             this.gpboxConfig.TabStop = false;
             this.gpboxConfig.Text = "Project configuration";
+            // 
+            // txtPause
+            // 
+            this.txtPause.Location = new System.Drawing.Point(371, 27);
+            this.txtPause.Name = "txtPause";
+            this.txtPause.Size = new System.Drawing.Size(35, 22);
+            this.txtPause.TabIndex = 5;
+            this.txtPause.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtPause_KeyDown);
+            // 
+            // lblpause
+            // 
+            this.lblpause.AutoSize = true;
+            this.lblpause.Location = new System.Drawing.Point(198, 30);
+            this.lblpause.Name = "lblpause";
+            this.lblpause.Size = new System.Drawing.Size(167, 17);
+            this.lblpause.TabIndex = 4;
+            this.lblpause.Text = "Pause between times (s):";
+            // 
+            // lblcutTime
+            // 
+            this.lblcutTime.AutoSize = true;
+            this.lblcutTime.Location = new System.Drawing.Point(29, 66);
+            this.lblcutTime.Name = "lblcutTime";
+            this.lblcutTime.Size = new System.Drawing.Size(88, 17);
+            this.lblcutTime.TabIndex = 3;
+            this.lblcutTime.Text = "Cut time (s): ";
+            // 
+            // txtCutTime
+            // 
+            this.txtCutTime.Location = new System.Drawing.Point(123, 63);
+            this.txtCutTime.Name = "txtCutTime";
+            this.txtCutTime.Size = new System.Drawing.Size(37, 22);
+            this.txtCutTime.TabIndex = 2;
+            this.txtCutTime.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtCutTime_KeyDown);
+            // 
+            // txtRepetitions
+            // 
+            this.txtRepetitions.Location = new System.Drawing.Point(123, 27);
+            this.txtRepetitions.Name = "txtRepetitions";
+            this.txtRepetitions.Size = new System.Drawing.Size(37, 22);
+            this.txtRepetitions.TabIndex = 1;
+            this.txtRepetitions.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtRepetitions_KeyDown);
+            // 
+            // lblReplay
+            // 
+            this.lblReplay.AutoSize = true;
+            this.lblReplay.Location = new System.Drawing.Point(7, 30);
+            this.lblReplay.Name = "lblReplay";
+            this.lblReplay.Size = new System.Drawing.Size(110, 17);
+            this.lblReplay.TabIndex = 0;
+            this.lblReplay.Text = "Replays (times):";
             // 
             // btnLoadProject
             // 
@@ -125,6 +190,7 @@
             this.btnLoadProject.TabIndex = 5;
             this.btnLoadProject.Text = "&Load project";
             this.btnLoadProject.UseVisualStyleBackColor = true;
+            this.btnLoadProject.Click += new System.EventHandler(this.btnLoadProject_Click);
             // 
             // btnSaveProject
             // 
@@ -136,6 +202,7 @@
             this.btnSaveProject.TabIndex = 6;
             this.btnSaveProject.Text = "&Save project";
             this.btnSaveProject.UseVisualStyleBackColor = true;
+            this.btnSaveProject.Click += new System.EventHandler(this.btnSaveProject_Click);
             // 
             // btnNewProject
             // 
@@ -147,6 +214,7 @@
             this.btnNewProject.TabIndex = 7;
             this.btnNewProject.Text = "&New project";
             this.btnNewProject.UseVisualStyleBackColor = true;
+            this.btnNewProject.Click += new System.EventHandler(this.btnNewProject_Click);
             // 
             // gpBoxAudio
             // 
@@ -277,19 +345,19 @@
             // lblVolume
             // 
             this.lblVolume.AutoSize = true;
-            this.lblVolume.Location = new System.Drawing.Point(784, 304);
+            this.lblVolume.Location = new System.Drawing.Point(846, 65);
             this.lblVolume.Name = "lblVolume";
-            this.lblVolume.Size = new System.Drawing.Size(63, 17);
+            this.lblVolume.Size = new System.Drawing.Size(55, 17);
             this.lblVolume.TabIndex = 5;
-            this.lblVolume.Text = "Volume: ";
+            this.lblVolume.Text = "Volume";
             // 
             // trackVolume
             // 
-            this.trackVolume.Location = new System.Drawing.Point(853, 65);
+            this.trackVolume.Location = new System.Drawing.Point(853, 86);
             this.trackVolume.Maximum = 100;
             this.trackVolume.Name = "trackVolume";
             this.trackVolume.Orientation = System.Windows.Forms.Orientation.Vertical;
-            this.trackVolume.Size = new System.Drawing.Size(56, 241);
+            this.trackVolume.Size = new System.Drawing.Size(56, 220);
             this.trackVolume.TabIndex = 4;
             this.trackVolume.Value = 100;
             this.trackVolume.Scroll += new System.EventHandler(this.trackVolume_Scroll);
@@ -313,11 +381,12 @@
             this.trackTime.Name = "trackTime";
             this.trackTime.Size = new System.Drawing.Size(901, 56);
             this.trackTime.TabIndex = 2;
+            this.trackTime.Scroll += new System.EventHandler(this.trackTime_Scroll);
             this.trackTime.MouseDown += new System.Windows.Forms.MouseEventHandler(this.trackTime_MouseDown);
             // 
             // btnStop
             // 
-            this.btnStop.Location = new System.Drawing.Point(710, 293);
+            this.btnStop.Location = new System.Drawing.Point(529, 293);
             this.btnStop.Margin = new System.Windows.Forms.Padding(4);
             this.btnStop.Name = "btnStop";
             this.btnStop.Size = new System.Drawing.Size(67, 28);
@@ -337,10 +406,6 @@
             this.btnPlay.UseVisualStyleBackColor = true;
             this.btnPlay.Click += new System.EventHandler(this.BtnPlay_Click);
             // 
-            // openFileDialog1
-            // 
-            this.openFileDialog1.FileName = "openFileDialog1";
-            // 
             // MainWindows
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -359,6 +424,8 @@
             this.Name = "MainWindows";
             this.Text = "Transcript tool";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainWindows_FormClosing);
+            this.gpboxConfig.ResumeLayout(false);
+            this.gpboxConfig.PerformLayout();
             this.gpBoxAudio.ResumeLayout(false);
             this.gpBoxAudio.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackVolume)).EndInit();
@@ -396,6 +463,13 @@
         private System.Windows.Forms.Button btnGoPosition;
         private System.Windows.Forms.TextBox txtGoTo;
         private System.Windows.Forms.Label lblGoto;
+        private System.Windows.Forms.Label lblcutTime;
+        private System.Windows.Forms.TextBox txtCutTime;
+        private System.Windows.Forms.TextBox txtRepetitions;
+        private System.Windows.Forms.Label lblReplay;
+        private System.Windows.Forms.Label lblpause;
+        private System.Windows.Forms.TextBox txtPause;
+        private System.Windows.Forms.SaveFileDialog saveFileDialog1;
     }
 }
 

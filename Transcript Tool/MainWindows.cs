@@ -25,16 +25,7 @@ namespace Transcript_Tool
         public MainWindows()
         {
             InitializeComponent();
-            Init();
-        }
-
-        void Init()
-        {
-            config = new Config();
-            audioControl = new AudioControl();
-            audioControl.UpdatePosition += AudioControl_UpdatePosition;
-            safeFunction = new UpdatePositionSafe(AudioControl_UpdatePosition);
-            noSignal = false;
+            Initialize();
         }
 
 
@@ -44,7 +35,7 @@ namespace Transcript_Tool
             {
                 if (MessageBox.Show("The project is not saved. Do you want save it?", "Warning - Not saved project", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
                 {
-                    config.SaveProyect();
+                    SaveData();
                 }
             }
             Environment.Exit(0);
@@ -108,8 +99,8 @@ namespace Transcript_Tool
 
         private void MainWindows_FormClosing(object sender, FormClosingEventArgs e)
         {
-            noSignal = true;
             audioControl.UpdatePosition -= AudioControl_UpdatePosition;
+            noSignal = true;
             audioControl.Stop();
             audioControl.Dispose();
             audioControl = null;
@@ -155,10 +146,11 @@ namespace Transcript_Tool
                 {
                     timeString = "00:" + timeString;
                 }
+                var time = timeString.Split(new char[] { ':' });
 
-                var time = txtGoTo.Text.Split(new char[] { ':' });
+                var timeSpan = new TimeSpan(0, Convert.ToInt32(time[0]), Convert.ToInt32(time[1]));
 
-                var timeSplit = new TimeSpan(0, Convert.ToInt32(time[0]), Convert.ToInt32(time[1]));
+                audioControl.AudioGoToPosition(timeSpan);
             }
         }
 
@@ -203,5 +195,103 @@ namespace Transcript_Tool
                 shiftPressed = false;
             }
         }
+
+        private void trackTime_Scroll(object sender, EventArgs e)
+        {
+            var pos = trackTime.Value;
+            audioControl.AudioGoToPosition(new TimeSpan(0, 0, pos));
+        }
+
+        private void txtRepetitions_KeyDown(object sender, KeyEventArgs e)
+        {
+            OnlyNumber(e);
+        }
+
+        private void txtCutTime_KeyDown(object sender, KeyEventArgs e)
+        {
+            OnlyNumber(e);
+        }
+
+        private void txtPause_KeyDown(object sender, KeyEventArgs e)
+        {
+            OnlyNumber(e);
+        }
+
+        public void OnlyNumber(KeyEventArgs e)
+        {
+            if (e.KeyCode >= Keys.D0 && e.KeyCode <= Keys.D9)
+            {
+                e.SuppressKeyPress = false;
+            }
+            else
+            {
+                e.SuppressKeyPress = true;
+            }
+        }
+
+        private void btnNewProject_Click(object sender, EventArgs e)
+        {
+            Initialize();
+        }
+
+        void Initialize()
+        {
+            txtCutTime.Text = "0";
+            txtRepetitions.Text = "0";
+            txtGoTo.Text = "0";
+            txtFileName.Text = string.Empty;
+
+            config = new Config();
+            audioControl = new AudioControl();
+            audioControl.UpdatePosition += AudioControl_UpdatePosition;
+            safeFunction = new UpdatePositionSafe(AudioControl_UpdatePosition);
+            noSignal = false;
+        }
+
+        private void btnLoadProject_Click(object sender, EventArgs e)
+        {
+            LoadData();
+        }
+
+        private void btnSaveProject_Click(object sender, EventArgs e)
+        {
+            SaveData();
+        }
+
+        private void LoadData()
+        {
+            openFileDialog1.FileName = string.Empty;
+            openFileDialog1.ShowDialog();
+            var projectName = openFileDialog1.FileName;
+            if (!string.IsNullOrEmpty(projectName))
+            {
+                config.LoadProject(projectName);
+
+                txtCutTime.Text = config.CutTime;
+                txtFileName.Text = config.Path;
+                txtRepetitions.Text = config.TimesToRepeat;
+                txtPause.Text = config.PauseBetTime;
+                txtGoTo.Text = config.Position;
+            }
+        }
+
+        private void SaveData()
+        {
+            saveFileDialog1.FileName = string.Empty;
+            saveFileDialog1.ShowDialog();
+            var projectName = saveFileDialog1.FileName;
+            if (!string.IsNullOrEmpty(projectName))
+            {
+                config.CutTime = txtCutTime.Text;
+                config.Path = txtFileName.Text;
+                config.TimesToRepeat = txtRepetitions.Text;
+                config.PauseBetTime = txtPause.Text;
+                config.Position = txtGoTo.Text;
+
+                config.SaveProyect(projectName);
+            }
+        }
+
+
     }
 }
