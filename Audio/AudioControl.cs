@@ -11,8 +11,7 @@ namespace Audio
     public class AudioControl : IDisposable
     {
         private WaveOutEvent outputDevice;
-        private AudioFileReader audioFile;
-
+        private AudioFileReader audioFile;        
         public delegate void UpdatePositionDelegate(int pos);
         public event UpdatePositionDelegate UpdatePosition;
         Timer t;
@@ -38,7 +37,6 @@ namespace Audio
             {
                 return (int)(audioFile.Volume * 100);
             }
-
             return 0;
         }
 
@@ -48,7 +46,6 @@ namespace Audio
             {
                 audioFile.Volume = volume / 100f;
             }
-
         }
 
         void TimerCallback(Object o)
@@ -58,7 +55,6 @@ namespace Audio
                 UpdatePosition.Invoke((int)audioFile.CurrentTime.TotalSeconds);
             }
         }
-
 
         public void LoadFile(string fileName)
         {
@@ -121,7 +117,7 @@ namespace Audio
             AudioPosition(seconds);
         }
 
-        public void AudioPosition(int seconds)
+        void AudioPosition(int seconds)
         {
             if (audioFile != null)
             {
@@ -129,11 +125,20 @@ namespace Audio
             }
         }
 
+        public void AudioGoToPosition(TimeSpan position)
+        {
+            if (audioFile != null)
+            {
+                audioFile.CurrentTime = position;
+            }
+        }
+
         public int GetDuration()
         {
             if (audioFile != null)
+            {
                 return (int)audioFile.TotalTime.TotalSeconds;
-
+            }
             return 0;
         }
 
