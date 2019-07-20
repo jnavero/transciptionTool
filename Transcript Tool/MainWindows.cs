@@ -1,13 +1,6 @@
 ﻿using Audio;
 using Configurations;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Transcript_Tool
@@ -18,6 +11,7 @@ namespace Transcript_Tool
         AudioControl audioControl;
         bool noSignal;
         bool shiftPressed;
+        int counter;
 
         private delegate void UpdatePositionSafe(int position);
         UpdatePositionSafe safeFunction;
@@ -42,6 +36,11 @@ namespace Transcript_Tool
         }
 
         private void BtnPlay_Click(object sender, EventArgs e)
+        {
+            Play();
+        }
+
+        private void Play()
         {
             if (audioControl.Play())
             {
@@ -84,11 +83,19 @@ namespace Transcript_Tool
         private void BtnStop_Click(object sender, EventArgs e)
         {
             audioControl.Stop();
+            timer.Stop();
+            counter = 0;
         }
 
         private void btnPause_Click(object sender, EventArgs e)
         {
+            Pause();
+        }
+
+        private void Pause()
+        {
             audioControl.Pause();
+            timer.Stop();
         }
 
         private void trackVolume_Scroll(object sender, EventArgs e)
@@ -132,31 +139,48 @@ namespace Transcript_Tool
             lblTimeStatus.Text = position.ToString() + "s / " + audioControl.GetCurrentPosition();
         }
 
-        private void trackTime_MouseDown(object sender, MouseEventArgs e)
-        {
-
-        }
-
         private void btnGoPosition_Click(object sender, EventArgs e)
         {
-            if(trackTime.Maximum != 0)
-            {
-                var timeString = txtGoTo.Text;
-                if (!timeString.Contains(":"))
-                {
-                    timeString = "00:" + timeString;
-                }
-                var time = timeString.Split(new char[] { ':' });
-
-                var timeSpan = new TimeSpan(0, Convert.ToInt32(time[0]), Convert.ToInt32(time[1]));
-
-                audioControl.AudioGoToPosition(timeSpan);
-            }
+            GotoPosition();
         }
 
         private void txtGoTo_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyValue == 190 && shiftPressed)
+            OnlyNumber(e, true);
+        }
+
+        private void txtGoTo_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.ShiftKey)
+            {
+                shiftPressed = false;
+            }
+        }
+
+        private void trackTime_Scroll(object sender, EventArgs e)
+        {
+            var pos = trackTime.Value;
+            audioControl.AudioGoToPosition(new TimeSpan(0, 0, pos));
+        }
+
+        private void txtRepetitions_KeyDown(object sender, KeyEventArgs e)
+        {
+            OnlyNumber(e, false);
+        }
+
+        private void txtCutTime_KeyDown(object sender, KeyEventArgs e)
+        {
+            OnlyNumber(e, false);
+        }
+
+        private void txtPause_KeyDown(object sender, KeyEventArgs e)
+        {
+            OnlyNumber(e, false);
+        }
+
+        public void OnlyNumber(KeyEventArgs e, bool withTwoPoints)
+        {
+            if (e.KeyValue == 190 && shiftPressed && withTwoPoints)
             {
                 if (!txtGoTo.Text.Contains(":"))
                 {
@@ -188,44 +212,18 @@ namespace Transcript_Tool
             }
         }
 
-        private void txtGoTo_KeyUp(object sender, KeyEventArgs e)
+        private void GotoPosition()
         {
-            if (e.KeyCode == Keys.ShiftKey)
+            if (trackTime.Maximum != 0)
             {
-                shiftPressed = false;
-            }
-        }
-
-        private void trackTime_Scroll(object sender, EventArgs e)
-        {
-            var pos = trackTime.Value;
-            audioControl.AudioGoToPosition(new TimeSpan(0, 0, pos));
-        }
-
-        private void txtRepetitions_KeyDown(object sender, KeyEventArgs e)
-        {
-            OnlyNumber(e);
-        }
-
-        private void txtCutTime_KeyDown(object sender, KeyEventArgs e)
-        {
-            OnlyNumber(e);
-        }
-
-        private void txtPause_KeyDown(object sender, KeyEventArgs e)
-        {
-            OnlyNumber(e);
-        }
-
-        public void OnlyNumber(KeyEventArgs e)
-        {
-            if (e.KeyCode >= Keys.D0 && e.KeyCode <= Keys.D9)
-            {
-                e.SuppressKeyPress = false;
-            }
-            else
-            {
-                e.SuppressKeyPress = true;
+                var timeString = txtGoTo.Text;
+                if (!timeString.Contains(":"))
+                {
+                    timeString = "00:" + timeString;
+                }
+                var time = timeString.Split(new char[] { ':' });
+                var timeSpan = new TimeSpan(0, Convert.ToInt32(time[0]), Convert.ToInt32(time[1]));
+                audioControl.AudioGoToPosition(timeSpan);
             }
         }
 
@@ -244,6 +242,10 @@ namespace Transcript_Tool
             config = new Config();
             audioControl = new AudioControl();
             audioControl.UpdatePosition += AudioControl_UpdatePosition;
+            timer.Tick -= Timer_Tick;
+            timer.Tick += Timer_Tick;
+            pauseTimer.Tick -= PauseTimer_Tick;
+            pauseTimer.Tick += PauseTimer_Tick; 
             safeFunction = new UpdatePositionSafe(AudioControl_UpdatePosition);
             noSignal = false;
         }
@@ -287,11 +289,52 @@ namespace Transcript_Tool
                 config.TimesToRepeat = txtRepetitions.Text;
                 config.PauseBetTime = txtPause.Text;
                 config.Position = txtGoTo.Text;
-
                 config.SaveProyect(projectName);
             }
         }
 
+        private void btnplaySettings_Click(object sender, EventArgs e)
+        {
+            var time = Convert.ToInt32(txtCutTime.Text);
+            if (time > 0 )
+            {
+                counter = 0;
+                timer.Interval = time * 1000;
+                Play();
+                timer.Start();
+            }
+        }
+
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            var cutTime = Convert.ToInt32(txtCutTime.Text);
+
+            if (audioControl.GetCurrentSeconds() % cutTime == 0)
+            {
+                //Hacer una pausa y volver atrás hasta que counter == las repeticiones
+                if (counter < Convert.ToInt32(txtRepetitions.Text))
+                {
+                    counter++;
+                    var time = Convert.ToInt32(txtPause.Text);
+                    timer.Stop();
+                    audioControl.Pause();
+                    pauseTimer.Interval = time * 1000;
+                    pauseTimer.Start();
+                }
+                else
+                {
+                    counter = 0;
+                }
+            }
+        }
+
+        private void PauseTimer_Tick(object sender, EventArgs e)
+        {
+            audioControl.Rewind(Convert.ToInt32(txtCutTime.Text));
+            Play();
+            pauseTimer.Stop();
+            timer.Start();
+        }
 
     }
 }

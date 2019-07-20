@@ -28,11 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.btnExit = new System.Windows.Forms.Button();
             this.btnTranscriptFile = new System.Windows.Forms.Button();
             this.lblTranscriptFile = new System.Windows.Forms.Label();
             this.txtFileName = new System.Windows.Forms.TextBox();
             this.gpboxConfig = new System.Windows.Forms.GroupBox();
+            this.btnplaySettings = new System.Windows.Forms.Button();
             this.txtPause = new System.Windows.Forms.TextBox();
             this.lblpause = new System.Windows.Forms.Label();
             this.lblcutTime = new System.Windows.Forms.Label();
@@ -61,6 +63,8 @@
             this.btnPlay = new System.Windows.Forms.Button();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+            this.timer = new System.Windows.Forms.Timer(this.components);
+            this.pauseTimer = new System.Windows.Forms.Timer(this.components);
             this.gpboxConfig.SuspendLayout();
             this.gpBoxAudio.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackVolume)).BeginInit();
@@ -114,6 +118,7 @@
             // 
             // gpboxConfig
             // 
+            this.gpboxConfig.Controls.Add(this.btnplaySettings);
             this.gpboxConfig.Controls.Add(this.txtPause);
             this.gpboxConfig.Controls.Add(this.lblpause);
             this.gpboxConfig.Controls.Add(this.lblcutTime);
@@ -128,6 +133,16 @@
             this.gpboxConfig.TabIndex = 4;
             this.gpboxConfig.TabStop = false;
             this.gpboxConfig.Text = "Project configuration";
+            // 
+            // btnplaySettings
+            // 
+            this.btnplaySettings.Location = new System.Drawing.Point(693, 66);
+            this.btnplaySettings.Name = "btnplaySettings";
+            this.btnplaySettings.Size = new System.Drawing.Size(217, 30);
+            this.btnplaySettings.TabIndex = 16;
+            this.btnplaySettings.Text = "Play With Settings";
+            this.btnplaySettings.UseVisualStyleBackColor = true;
+            this.btnplaySettings.Click += new System.EventHandler(this.btnplaySettings_Click);
             // 
             // txtPause
             // 
@@ -382,7 +397,6 @@
             this.trackTime.Size = new System.Drawing.Size(901, 56);
             this.trackTime.TabIndex = 2;
             this.trackTime.Scroll += new System.EventHandler(this.trackTime_Scroll);
-            this.trackTime.MouseDown += new System.Windows.Forms.MouseEventHandler(this.trackTime_MouseDown);
             // 
             // btnStop
             // 
@@ -405,6 +419,10 @@
             this.btnPlay.Text = "Play";
             this.btnPlay.UseVisualStyleBackColor = true;
             this.btnPlay.Click += new System.EventHandler(this.BtnPlay_Click);
+            // 
+            // timer
+            // 
+
             // 
             // MainWindows
             // 
@@ -470,6 +488,9 @@
         private System.Windows.Forms.Label lblpause;
         private System.Windows.Forms.TextBox txtPause;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
+        private System.Windows.Forms.Button btnplaySettings;
+        private System.Windows.Forms.Timer timer;
+        private System.Windows.Forms.Timer pauseTimer;
     }
 }
 

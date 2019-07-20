@@ -155,6 +155,15 @@ namespace Audio
             return null;
         }
 
+        public int GetCurrentSeconds()
+        {
+            if (audioFile != null)
+            {
+                return (int)audioFile.CurrentTime.TotalSeconds;
+            }
+            return 0;
+        }
+
         public void Dispose()
         {
             outputDevice.Dispose();
